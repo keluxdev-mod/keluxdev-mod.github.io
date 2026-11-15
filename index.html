@@ -1,43 +1,198 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NoMoreShorts</title>
-<meta name="description" content="NoMoreShorts: YouTube Shorts engelleyici / YouTube Shorts blocker for Android.">
+<title>NoMoreShorts: YouTube Shorts blocker</title>
+<meta name="description" content="NoMoreShorts blocks YouTube Shorts on Android. Timer, automatic schedule and protection that collects no screen data.">
+<meta name="theme-color" content="#0b0b0d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0b0d'/%3E%3Cpath d='M32 4 8 12v18c0 15 10 26 24 30 14-4 24-15 24-30V12z' fill='%23fff'/%3E%3Cpath d='M32 9 13 15.5V30c0 12 8 21 19 24.8C43 51 51 42 51 30V15.5z' fill='%230b0b0d'/%3E%3Ccircle cx='32' cy='31' r='13' fill='none' stroke='%23e5322d' stroke-width='4'/%3E%3Cpath d='M28 24.5v13l10-6.5z' fill='%23fff'/%3E%3Cpath d='m22.8 21.8 18.4 18.4' stroke='%23e5322d' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
-:root{--bg:#f7f7f8;--card:#fff;--text:#1b1b1f;--muted:#5f6068;--accent:#d93025;--line:#e3e3e8}
-@media (prefers-color-scheme:dark){:root{--bg:#121214;--card:#1c1c20;--text:#ececf1;--muted:#a3a3ad;--accent:#ff6b5e;--line:#2c2c33}}
+:root{--bg:#0b0b0d;--bg2:#131317;--card:#17171c;--line:#26262e;--text:#f2f2f5;--muted:#a1a1ad;--red:#e5322d;--red2:#ff5a4f;--ok:#3ecf8e;--r:18px}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
-main{max-width:640px;margin:0 auto;padding:48px 16px}
-h1{font-size:2rem;margin:0 0 4px}
-.tag{color:var(--muted);margin:0 0 32px}
-section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-bottom:16px}
-h2{font-size:1.1rem;margin:0 0 8px}
-p{margin:0 0 12px}
-.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;padding:10px 18px;border-radius:999px;font-weight:600}
-footer{color:var(--muted);font-size:.9rem;text-align:center;margin-top:32px}
-footer a{color:var(--muted)}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.logo{display:block;flex:none;background:radial-gradient(circle at 50% 45%,#3a0d0c,#0b0b0d 70%);border:1px solid #2a1414}
+
+header{position:sticky;top:0;z-index:20;background:rgba(11,11,13,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:-.01em}
+.brand .logo{width:34px;height:34px;border-radius:9px;padding:4px}
+.right{display:flex;align-items:center;gap:10px}
+.navbtn{text-decoration:none;font-size:.86rem;font-weight:700;background:var(--red);color:#fff;padding:8px 16px;border-radius:999px;white-space:nowrap}
+.navbtn:hover{background:var(--red2)}
+
+.hero{position:relative;padding:72px 0 88px;overflow:hidden}
+.hero:before{content:"";position:absolute;top:-30%;inset-inline-end:-10%;width:720px;height:720px;background:radial-gradient(closest-side,rgba(229,50,45,.32),transparent);pointer-events:none}
+.hero:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse at 70% 30%,#000 10%,transparent 65%);-webkit-mask-image:radial-gradient(ellipse at 70% 30%,#000 10%,transparent 65%);pointer-events:none}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero-grid>*,.privacy>*{min-width:0}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);border:1px solid var(--line);background:var(--bg2);padding:6px 12px;border-radius:999px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(62,207,142,.15)}
+h1{font-size:clamp(2.2rem,5.4vw,3.9rem);line-height:1.08;letter-spacing:-.03em;margin:20px 0 18px;font-weight:800}
+h1 span{display:block}
+h1 em{display:block;font-style:normal;background:linear-gradient(90deg,var(--red2),#ff8a5c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:1.13rem;color:var(--muted);max-width:520px;margin:0 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.play{display:inline-flex;align-items:center;gap:12px;background:var(--text);color:var(--bg);text-decoration:none;padding:12px 22px 12px 18px;border-radius:14px;font-weight:700;transition:transform .15s}
+.play:hover{transform:translateY(-2px)}
+.play small{display:block;font-size:.68rem;font-weight:600;opacity:.7;line-height:1.1;letter-spacing:.02em}
+.play span{line-height:1.15}
+.meta{display:flex;gap:22px;margin-top:30px;color:var(--muted);font-size:.9rem;flex-wrap:wrap}
+.meta b{color:var(--text)}
+
+.phone-wrap{display:flex;justify-content:center}
+.phone{width:290px;aspect-ratio:9/19;border-radius:44px;background:#000;border:10px solid #1d1d22;box-shadow:0 0 0 1px #2c2c33,0 40px 80px -20px rgba(229,50,45,.35),0 30px 60px rgba(0,0,0,.6);padding:18px 16px;display:flex;flex-direction:column;gap:12px;position:relative;transform:rotate(2deg)}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:84px;height:22px;background:#1d1d22;border-radius:0 0 14px 14px}
+.ph-top{display:flex;justify-content:space-between;font-size:.66rem;color:#8b8b95;padding:0 4px;margin-top:6px}
+.ph-title{font-weight:700;font-size:1rem;margin:4px 4px 0}
+.shield{margin:8px auto 4px;width:150px;height:150px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,rgba(229,50,45,.35),rgba(229,50,45,.05) 60%,transparent 70%);position:relative}
+.shield:before{content:"";position:absolute;inset:14px;border-radius:50%;border:2px solid rgba(255,90,79,.5);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.25);opacity:0}}
+@media (prefers-reduced-motion:reduce){.shield:before{animation:none}}
+.shield svg{width:78px;height:78px}
+.ph-status{text-align:center;font-weight:700;color:var(--ok);font-size:.9rem}
+.ph-card{background:#141418;border:1px solid #24242b;border-radius:14px;padding:10px 12px;font-size:.74rem;color:#c9c9d2;display:flex;align-items:center;gap:10px}
+.ph-card i{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(229,50,45,.14)}
+.ph-card i svg{width:15px;height:15px}
+.ph-card b{display:block;color:#fff;font-size:.78rem}
+.ph-nav{margin-top:auto;display:flex;justify-content:space-around;border-top:1px solid #222228;padding-top:10px;font-size:.62rem;color:#7d7d88}
+.ph-nav span:first-child{color:var(--red2)}
+
+section{padding:88px 0;border-top:1px solid rgba(255,255,255,.05)}
+.kicker{color:var(--red2);font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.025em;line-height:1.15;margin:10px 0 14px}
+h2 span{display:block}
+.sub{color:var(--muted);max-width:620px;margin:0 0 44px;font-size:1.05rem}
+
+
+.privacy{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;background:radial-gradient(600px 300px at 0% 0%,rgba(62,207,142,.08),transparent),var(--card);border:1px solid var(--line);border-radius:28px;padding:48px}
+.privacy .kicker{color:var(--ok)}
+.privacy .sub{margin-bottom:18px}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.checks li{display:flex;gap:12px;align-items:flex-start}
+.checks svg{flex:none;width:22px;height:22px;margin-top:2px;stroke:var(--ok);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.link{color:var(--red2);font-weight:600;text-decoration:none}
+.link:hover{text-decoration:underline}
+
+.final{text-align:center;background:radial-gradient(500px 260px at 50% 0%,rgba(229,50,45,.28),transparent),var(--bg2);border:1px solid var(--line);border-radius:28px;padding:64px 24px}
+.final .logo{width:84px;height:84px;border-radius:22px;padding:12px;margin:0 auto 22px;box-shadow:0 20px 50px -10px rgba(229,50,45,.5)}
+.final .sub{margin:0 auto 30px}
+.final .cta{justify-content:center}
+
+footer{padding:36px 0 48px;color:var(--muted);font-size:.9rem}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.foot nav{display:flex;gap:22px}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--text)}
+
+@media (max-width:900px){
+.hero-grid{grid-template-columns:1fr}
+.phone-wrap{margin-top:8px}
+.phone{width:240px;transform:none}
+.privacy{grid-template-columns:1fr;padding:32px 24px}
+}
+@media (max-width:600px){
+.wrap{padding:0 16px}
+.hero{padding:40px 0 64px}
+section{padding:64px 0}
+.brand>span,.navbtn{display:none}
+}
 </style>
 </head>
 <body>
-<main>
-<h1>NoMoreShorts</h1>
-<p class="tag">Focus &amp; Blocker</p>
-<section lang="tr">
-<h2>Türkçe</h2>
-<p>NoMoreShorts, Android'de YouTube Shorts'u engelleyerek odaklanmanıza yardım eder. Shorts açıldığında uygulama sizi otomatik olarak geri çıkarır. Engellemeyi zamanlayıcı ve programlarla istediğiniz saatlere göre ayarlayabilirsiniz.</p>
-<a class="btn" href="https://play.google.com/store/apps/details?id=com.nomoreshorts.app">Google Play'de indir</a>
+
+<header>
+<div class="wrap nav">
+<a class="brand" href="#top"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#shield"/></svg><span>NoMoreShorts</span></a>
+<div class="right">
+<a class="navbtn" href="https://play.google.com/store/apps/details?id=com.nomoreshorts.app">Download</a>
+</div>
+</div>
+</header>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="shield" viewBox="0 0 64 64"><path d="M32 4 8 12v18c0 15 10 26 24 30 14-4 24-15 24-30V12z" fill="#fff"/><path d="M32 9 13 15.5V30c0 12 8 21 19 24.8C43 51 51 42 51 30V15.5z" fill="#0b0b0d"/><circle cx="32" cy="31" r="13" fill="none" stroke="#e5322d" stroke-width="4"/><path d="M28 24.5v13l10-6.5z" fill="#fff"/><path d="m22.8 21.8 18.4 18.4" stroke="#e5322d" stroke-width="4" stroke-linecap="round"/></symbol></svg>
+
+<main id="top">
+
+<div class="hero">
+<div class="wrap hero-grid">
+<div>
+<span class="pill"><span class="dot"></span><span>Free for Android</span></span>
+<h1><span>Stop scrolling Shorts.</span><em>Take back your focus.</em></h1>
+<p class="lead">NoMoreShorts takes you back the moment YouTube Shorts opens. You keep using YouTube; only the endless scrolling stops.</p>
+<div class="cta">
+<a class="play" href="https://play.google.com/store/apps/details?id=com.nomoreshorts.app">
+<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path fill="#00d7fe" d="M3.6 1.8 13.4 12l-9.8 10.2c-.3-.2-.5-.6-.5-1V2.8c0-.4.2-.8.5-1z"/><path fill="#ffce00" d="m16.8 8.6-3.4 3.4 3.4 3.4 3.8-2.2c.8-.5.8-1.7 0-2.2z"/><path fill="#ff3a44" d="M13.4 12 3.6 22.2c.4.3 1 .3 1.5 0l11.7-6.8z"/><path fill="#00f076" d="M3.6 1.8c.4-.3 1-.3 1.5 0l11.7 6.8L13.4 12z"/></svg>
+<span><small>GET IT ON</small>Google Play</span>
+</a>
+</div>
+<div class="meta"><span><b>Zero</b> data collected</span><span><b>One-tap</b> protection</span></div>
+</div>
+
+<div class="phone-wrap" aria-hidden="true">
+<div class="phone">
+<div class="notch"></div>
+<div class="ph-top"><span>09:41</span><span>● ● ●</span></div>
+<div class="ph-title">Shorts Protection</div>
+<div class="shield"><svg viewBox="0 0 64 64"><use href="#shield"/></svg></div>
+<div class="ph-status">Protection active</div>
+<div class="ph-card"><i><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a4f" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></i><div><b>Block session</b><span>25 min left</span></div></div>
+<div class="ph-card"><i><svg viewBox="0 0 24 24" fill="none" stroke="#ff5a4f" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></i><div><b>Automatic Schedule</b>09:00 - 17:00 · <span>Weekdays</span></div></div>
+<div class="ph-nav"><span>Home</span><span>Timer</span><span>Settings</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<section id="privacy">
+<div class="wrap">
+<div class="privacy">
+<div>
+<div class="kicker">Privacy</div>
+<h2><span>No data collected.</span><span>Everything stays on your device.</span></h2>
+<p class="sub">The Accessibility service is used only to detect when a YouTube Shorts screen is open and to press Back to leave it.</p>
+<a class="link" href="/privacy-policy/">Read the privacy policy →</a>
+</div>
+<ul class="checks">
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><span>The service only reads YouTube screens.</span></li>
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><span>No personal data or screen content is collected, stored or shared.</span></li>
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><span>Your activity history stays on your device.</span></li>
+<li><svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg><span>You can turn the permission off any time in your phone's settings.</span></li>
+</ul>
+</div>
+</div>
 </section>
-<section lang="en">
-<h2>English</h2>
-<p>NoMoreShorts helps you stay focused by blocking YouTube Shorts on Android. When Shorts opens, the app takes you back automatically. You can use timers and schedules to block Shorts only when you want.</p>
-<a class="btn" href="https://play.google.com/store/apps/details?id=com.nomoreshorts.app">Get it on Google Play</a>
+
+<section id="download">
+<div class="wrap">
+<div class="final">
+<svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><use href="#shield"/></svg>
+<h2>Get your time back.</h2>
+<p class="sub">Set it up today and spend your Shorts hours on yourself.</p>
+<div class="cta">
+<a class="play" href="https://play.google.com/store/apps/details?id=com.nomoreshorts.app">
+<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path fill="#00d7fe" d="M3.6 1.8 13.4 12l-9.8 10.2c-.3-.2-.5-.6-.5-1V2.8c0-.4.2-.8.5-1z"/><path fill="#ffce00" d="m16.8 8.6-3.4 3.4 3.4 3.4 3.8-2.2c.8-.5.8-1.7 0-2.2z"/><path fill="#ff3a44" d="M13.4 12 3.6 22.2c.4.3 1 .3 1.5 0l11.7-6.8z"/><path fill="#00f076" d="M3.6 1.8c.4-.3 1-.3 1.5 0l11.7 6.8L13.4 12z"/></svg>
+<span><small>GET IT ON</small>Google Play</span>
+</a>
+</div>
+</div>
+</div>
 </section>
-<footer>
-<a href="/privacy-policy/">Gizlilik Politikası / Privacy Policy</a>
-</footer>
+
 </main>
+
+<footer>
+<div class="wrap foot">
+<span>© 2026 NoMoreShorts</span>
+<nav>
+<a href="/privacy-policy/">Privacy Policy</a>
+<a href="https://play.google.com/store/apps/details?id=com.nomoreshorts.app">Google Play</a>
+</nav>
+</div>
+</footer>
+
 </body>
 </html>
